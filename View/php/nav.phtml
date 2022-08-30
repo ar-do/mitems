@@ -1,0 +1,128 @@
+<?php
+    if(session_status() != 2) {
+        session_start();
+    }
+    $authCheck = new Authorisation();
+?>
+
+<nav id='sidebarMenu' class='col-md-3 col-lg-2 d-md-block bg-light sidebar collapse'>
+        <div class='position-sticky pt-3'>
+
+            <ul class='nav flex-column'>
+                <li class="nav-item">
+                <p class='nav-link border-bottom'>
+                    Hallo, <?php echo $_SESSION["fname"];?>
+                </p>
+                </li>
+ 
+            <li class='nav-item'>
+            <?php if(!isset($_GET['view']) || $_GET['view'] == "default") {
+                        echo "<a class='nav-link active' href='?view=default'>";
+                    }else{
+                        echo "<a class='nav-link' href='?view=default'>";
+                    }
+            ?>
+                <span data-feather='home' class='align-text-bottom'></span>
+                Home
+                </a>
+            </li>
+
+            <?php
+                if($authCheck->checkAuthorisation("self_view") == 1) {
+                    echo "<li class='nav-item'>";
+                    if(isset($_GET['view']) && $_GET['view'] == "myitems") {
+                        echo "<a class='nav-link active' href='?view=myitems'>";
+                    }else{
+                        echo "<a class='nav-link' href='?view=myitems'>";
+                    }
+                    echo"<span data-feather='user' class='align-text-bottom'></span>
+                            Meine Items
+                            </a>
+                        </li>";
+                }
+
+                if($authCheck->checkAuthorisation("items_assign") == 1 || $authCheck->checkAuthorisation("items_assign_remove") == 1) {
+                    echo "<li class='nav-item'>";
+                    if(isset($_GET['view']) && $_GET['view'] == "myemp") {
+                        echo "<a class='nav-link active' href='?view=myemp'>";
+                    }else{
+                        echo "<a class='nav-link' href='?view=myemp'>";
+                    }
+                    echo"<span data-feather='users' class='align-text-bottom'></span>
+                            Meine Mitarbeiter
+                            </a>
+                        </li>";
+                }
+
+                if($authCheck->checkAuthorisation("items_handin")) {
+                    echo "<li class='nav-item'>";
+                    if(isset($_GET['view']) && $_GET['view'] == "offboardings") {
+                        echo "<a class='nav-link active' href='?view=offboardings'>";
+                    }else{
+                        echo "<a class='nav-link' href='?view=offboardings'>";
+                    }
+                    echo"<span data-feather='users' class='align-text-bottom'></span>
+                            Austritte
+                            </a>
+                        </li>";
+                }
+
+            echo "</ul>";
+
+            if($authCheck->checkAuthorisation("emp_view") == 1 
+            || $authCheck->checkAuthorisation("emp_edit") == 1
+            || $authCheck->checkAuthorisation("items_create") == 1
+            || $authCheck->checkAuthorisation("items_edit") == 1
+            || $authCheck->checkAuthorisation("user_edit") == 1) {
+                echo "<h6 class='sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase'>
+                <span>Administration</span>
+            </h6>";
+            }
+
+
+            echo "<ul class='nav flex-column mb-2'>";
+            
+
+            if($authCheck->checkAuthorisation("emp_view") == 1 || $authCheck->checkAuthorisation("emp_edit") == 1) {
+                echo "<li class='nav-item'>";
+                if(isset($_GET['view']) && $_GET['view'] == "emp") {
+                    echo "<a class='nav-link active' href='?view=emp'>";
+                }else{
+                    echo "<a class='nav-link' href='?view=emp'>";
+                }
+                echo"<span data-feather='users' class='align-text-bottom'></span>
+                            Mitarbeiter
+                        </a>
+                    </li>";
+            }
+
+            if($authCheck->checkAuthorisation("items_create") == 1 || $authCheck->checkAuthorisation("items_edit") == 1) {
+                echo " <li class='nav-item'>";
+                if(isset($_GET['view']) && $_GET['view'] == "items") {
+                    echo "<a class='nav-link active' href='?view=items'>";
+                }else{
+                    echo "<a class='nav-link' href='?view=items'>";
+                }
+                echo"<span data-feather='file' class='align-text-bottom'></span>
+                            Items
+                        </a>
+                    </li>";
+            }
+
+            if($authCheck->checkAuthorisation("user_edit") == 1) {
+                echo "<li class='nav-item'>";
+                if(isset($_GET['view']) && $_GET['view'] == "users") {
+                    echo "<a class='nav-link active' href='?view=users'>";
+                }else{
+                    echo "<a class='nav-link' href='?view=users'>";
+                }
+                echo"<span data-feather='users' class='align-text-bottom'></span>
+                        Benutzerverwaltung
+                        </a>
+                    </li>";
+            }
+            ?>
+            </ul>
+        </div>
+
+</nav>

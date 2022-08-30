@@ -1,0 +1,112 @@
+<?php
+    if(session_status() != 2) {
+        session_start();
+    }
+    $authCheck = new Authorisation();
+?>
+<div class='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom'>
+            <h1 class='h2'>Hallo, <?php echo $_SESSION['fname'];?></h1>
+            
+</div>
+<div class='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3'>
+            <h4 class='h4'>Wilkommen bei Mitems!</h4>
+            
+</div>
+<?php
+echo "<div class='container'>
+  <div class='row'>
+    <div class='col'>";
+
+    if($authCheck->checkAuthorisation("self_view") == 1) {
+                    echo "      <div class='card' style='width: 18rem;'>
+                    <div class='card-body'>
+                      <h5 class='card-title'>Meine Items</h5>
+                      <p class='card-text' style='min-height:6rem;'>Eine Übersicht über die Items die dir zugewiesen sind</p>
+                      <a href='?view=myitems' class='btn btn-primary'>Zu meinen Items</a>
+                    </div>
+                  </div>";
+                }
+
+  echo "</div>
+    <div class='col'>";
+
+    if($authCheck->checkAuthorisation("items_assign") == 1 || $authCheck->checkAuthorisation("items_assign_remove") == 1) {
+      echo "<div class='card' style='width: 18rem;'>
+      <div class='card-body'>
+        <h5 class='card-title'>Meine Mitarbeiter</h5>
+        <p class='card-text' style='min-height:6rem;'>Eine Übersicht über die Mitarbeiter die dir zugewiesen sind, hier kannst du deinen Mitarbeitern Items zuweisen</p>
+        <a href='?view=myemp' class='btn btn-primary'>Zu meinen Mitarbeitern</a>
+      </div>
+    </div>";
+    }
+
+
+    echo "</div>
+    <div class='col'>";
+        
+    if($authCheck->checkAuthorisation("items_handin")) {
+      echo "<div class='card' style='width: 18rem;'>
+      <div class='card-body'>
+          <h5 class='card-title'>Austritte</h5>
+          <p class='card-text' style='min-height:6rem;'>Eine Übersicht der augetrettenen Mitarbeiter. Hier kannst du kontrollieren, welche Mitarbeiter welche Items zurückgegeben haben</p>
+          <a href='?view=offboardings' class='btn btn-primary'>Zu den Austritten</a>
+      </div>
+  </div>
+  </div>";
+
+  }
+    
+
+
+  echo "</div>
+  <div style='margin-top:5rem;'></div>
+  <div class='row'>
+    <div class='col'>";
+
+    if($authCheck->checkAuthorisation("emp_view") == 1 || $authCheck->checkAuthorisation("emp_edit") == 1) {
+
+      echo "
+      <div class='card' style='width: 18rem; '>
+              <div class='card-body'>
+                  <h5 class='card-title'>Mitarbeiter</h5>
+                  <p class='card-text' style='min-height:6rem;'>Eine Übersicht aller erfassten Mitarbeiter im Unternehmen. Hier kannst du Mitarbeiter bearbeiten oder erfassen.</p>
+                  <a href='?view=emp' class='btn btn-primary'>Zu den Mitarbeitern</a>
+              </div>
+          </div>";
+  }
+
+
+        echo "</div>
+    <div class='col'>";
+
+    if($authCheck->checkAuthorisation("items_create") == 1 || $authCheck->checkAuthorisation("items_edit") == 1) {
+      echo "<div class='card' style='width: 18rem;'>
+      <div class='card-body'>
+          <h5 class='card-title'>Items</h5>
+          <p class='card-text' style='min-height:6rem;'>Eine Übersicht aller erfassten Mitarbeiter. Hier kannst du Items bearbeiten oder erfassen</p>
+          <a href='?view=items' class='btn btn-primary'>Zu den Items</a>
+      </div>
+  </div>";
+  }
+
+
+    echo "</div>
+    <div class='col'>";
+
+    if($authCheck->checkAuthorisation("user_edit") == 1) {
+
+      echo "<div class='card' style='width: 18rem;'>
+      <div class='card-body'>
+          <h5 class='card-title'>Benutzerverwaltung</h5>
+          <p class='card-text' style='min-height:6rem;'>Eine Übersicht der Benutzer von Mitems. Hier kannst du Berechtigungen prüfen, neue Benutzer erfassen oder bearbeiten.</p>
+          <a href='?view=users' class='btn btn-primary'>Zu der Benutzerverwaltung</a>
+      </div>
+  </div>";
+  }
+
+
+    echo "</div>
+  </div>
+</div>";
+?>
+

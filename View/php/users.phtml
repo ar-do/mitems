@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Benutzerverwaltung</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+                <a href="?view=createuser"><button type="button" class="btn btn-sm btn-outline-secondary">Benutzer hinzufügen</button></a>
+                <a href="View/php/helper/helper_data_export.php?type=users" type="button" class="btn btn-sm btn-outline-secondary">Export</a>
+            </div>
+            </div>
+</div>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Benutzername</th>
+                <th scope="col">Nachname</th>
+                <th scope="col">Vorname</th>
+                <th scope="col">Rollen</th>
+                <th scope="col"> </th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+            $UserController = new User();
+            $RoleController = new Roles();
+            $authCheck = new Authorisation();
+            $result = $UserController->getAllUsers();
+            
+            while(odbc_fetch_row($result)) {
+
+                $roleresult = $RoleController->getRoles(odbc_result($result, "username"));
+
+                echo "<tr>";
+                echo"<td>".odbc_result($result, "id")."</td>
+                    <td>".odbc_result($result, "username")."</td>
+                    <td>".odbc_result($result, "sname")."</td>
+                    <td>".odbc_result($result, "fname")."</td>
+                    <td>".odbc_result($roleresult, "Role")."</td>";
+
+                if($authCheck->checkAuthorisation("user_edit") == 1){
+                    echo "<td><a href='?view=edituser&id=".odbc_result($result, 'id')."' type='button' class='btn btn-info'>Bearbeiten</button></td>";
+                }
+                echo "</tr>";
+            }
+            
+            ?>
+
+            </tbody>
+            </table>
+    </div>
